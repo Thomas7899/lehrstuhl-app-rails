@@ -84,8 +84,8 @@ Rails.application.configure do
 
   # KORRIGIERT: Fly.io Domain als vertrauenswürdig einstufen
   config.hosts = [
-    ".railway.app",                  # Alle Railway Subdomains
-    "lehrstuhl-app-rails.fly.dev",  # Deine Fly.io Domain
+    /.*\.railway\.app/,                                    # Regex: Erlaubt ALLES, was auf railway.app endet
+    "lehrstuhl-app-rails-app-production.up.railway.app",   # Deine Fly.io Domain
     /.*\.fly\.dev/                   # Alle Fly.io Subdomains
   ]
 
