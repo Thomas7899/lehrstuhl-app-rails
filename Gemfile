@@ -33,7 +33,6 @@ gem 'rack-cors'
 
 # KI Integration
 gem "ruby-openai", "~> 6.3"
-gem "httparty", "~> 0.22"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"

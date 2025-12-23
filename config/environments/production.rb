@@ -60,8 +60,8 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
-  # KORRIGIERT: Echte railway Domain für Mailer-Links
-  config.action_mailer.default_url_options = { host: "lehrstuhl-app-rails-app-production.up.railway.app" }
+  # KORRIGIERT: Echte Fly.io Domain für Mailer-Links
+  config.action_mailer.default_url_options = { host: "lehrstuhl-app-rails.fly.dev" }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
@@ -84,8 +84,7 @@ Rails.application.configure do
 
   # KORRIGIERT: Fly.io Domain als vertrauenswürdig einstufen
   config.hosts = [
-    /.*\.railway\.app/,                                    # Regex: Erlaubt ALLES, was auf railway.app endet
-    "lehrstuhl-app-rails-app-production.up.railway.app",   # Deine Fly.io Domain
+    "lehrstuhl-app-rails.fly.dev",  # Deine Fly.io Domain
     /.*\.fly\.dev/                   # Alle Fly.io Subdomains
   ]
 

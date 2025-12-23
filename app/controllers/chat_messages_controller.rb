@@ -1,25 +1,24 @@
+# app/controllers/chat_messages_controller.rb
 class ChatMessagesController < ApplicationController
-  skip_before_action :verify_authenticity_token
+  protect_from_forgery with: :null_session
 
-  before_action :set_student, only: [ :index, :create, :show ]
-  before_action :set_chat_message, only: [ :show ]
+  before_action :set_student
+  before_action :set_chat_message, only: [:show]
 
   def index
-    @messages = ChatMessage.where(user: @student).order(:created_at)
-    render json: @messages
+    messages = ChatMessage.conversation_history(@student)
+    render json: messages
   end
 
   def create
-    permitted_params = chat_message_params
-    return if performed?
+    message = ChatMessage.new(chat_message_params)
+    message.user = @student
+    message.role = "user" # 🔐 explizit & eindeutig
 
-    @message = ChatMessage.new(permitted_params)
-    @message.user = @student
-
-    if @message.save
-      render json: @message, status: :created
+    if message.save
+      render json: message, status: :created
     else
-      render json: @message.errors, status: :unprocessable_content
+      render json: message.errors, status: :unprocessable_content
     end
   end
 
@@ -43,30 +42,19 @@ class ChatMessagesController < ApplicationController
   end
 
   def chat_message_params
-  # Fall 1: Standard Rails nested parameters
-  if params[:chat_message].present?
-    begin
-      return params.require(:chat_message).permit(:content, :role)
-    rescue ActionController::ParameterMissing
-      render json: { error: "Missing chat_message parameters" }, status: :bad_request and return
+    if params[:chat_message].present?
+      params.require(:chat_message).permit(:content)
+    elsif params[:content].present?
+      { content: params[:content] }
+    else
+      render json: {
+        error: "Invalid or missing parameters",
+        expected_format: {
+          chat_message: {
+            content: "Your message content"
+          }
+        }
+      }, status: :bad_request and return
     end
   end
-
-  # Fall 2: Strikte Prüfung für flache Parameter
-  if params[:content].present? && params[:role].present?
-    return { content: params[:content], role: params[:role] }
-  end
-
-  # Fall 3: Keine gültigen Parameter gefunden -> Fehler rendern und stoppen
-  render json: {
-    error: "Invalid or missing parameters",
-    details: "Request must include either a nested 'chat_message' object or flat 'content' and 'role' parameters.",
-    expected_format: {
-      chat_message: {
-        content: "Your message content",
-        role: "user"
-      }
-    }
-  }, status: :bad_request
-end
 end

@@ -1,5 +1,4 @@
 require "openai"
-require "httparty"
 
 Rails.logger.info "[AI] Initialisiere KI-Clients ..."
 
