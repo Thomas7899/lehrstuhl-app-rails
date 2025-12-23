@@ -30,7 +30,6 @@ gem "will_paginate", "~> 4.0"
 
 gem 'rack-cors'
 
-
 # KI Integration
 gem "ruby-openai", "~> 6.3"
 

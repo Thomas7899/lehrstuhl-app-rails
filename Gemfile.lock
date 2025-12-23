@@ -235,7 +235,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.2.1)
+    rack (3.2.4)
     rack-cors (3.0.0)
       logger
       rack (>= 3.0.14)
@@ -439,6 +439,7 @@ DEPENDENCIES
   pgvector (~> 0.2.0)
   propshaft
   puma (>= 5.0)
+  rack (>= 3.2.3)
   rack-cors
   rails (~> 8.0.1)
   rake
