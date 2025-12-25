@@ -1,10 +1,21 @@
 # config/routes.rb
 Rails.application.routes.draw do
-  # ALLE generierten Routes entfernen:
-  # get "chat_messages/index"     ❌ ENTFERNEN
-  # get "chat_messages/create"    ❌ ENTFERNEN
-  # get "chat_messages/show"      ❌ ENTFERNEN
+  # ===== API Routes für Vue.js Frontend =====
+  namespace :api do
+    namespace :v1 do
+      resources :students
+      resources :seminare
+      resources :abschlussarbeiten
+      get 'dashboard/stats', to: 'dashboard#stats'
+      
+      # Chatbot API
+      get 'chatbot/messages', to: 'chatbot#messages'
+      post 'chatbot', to: 'chatbot#create'
+      delete 'chatbot/clear', to: 'chatbot#clear'
+    end
+  end
 
+  # ===== Legacy HTML Routes (für bestehende Rails Views) =====
   resources :abstrakte_abschlussarbeits
   get "registrations/new"
   get "registrations/create"

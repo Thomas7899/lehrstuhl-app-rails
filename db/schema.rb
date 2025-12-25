@@ -10,18 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_26_213508) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_25_214351) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
 
-# Could not dump table "abstrakte_abschlussarbeiten" because of following StandardError
-#   Unknown type 'vector(1536)' for column 'embedding'
+  create_table "abstrakte_abschlussarbeiten", force: :cascade do |t|
+    t.string "betreuer"
+    t.string "forschungsprojekt"
+    t.string "semester"
+    t.string "thema"
+    t.string "themenskizze"
+    t.integer "projekt_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "embedding"
+  end
 
-
-# Could not dump table "abstrakte_seminare" because of following StandardError
-#   Unknown type 'vector(1536)' for column 'embedding'
-
+  create_table "abstrakte_seminare", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "thema"
+    t.text "beschreibung"
+    t.uuid "mitarbeiter_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "embedding"
+    t.index ["embedding"], name: "index_abstrakte_seminare_on_embedding", using: :ivfflat
+    t.index ["mitarbeiter_id"], name: "index_abstrakte_seminare_on_mitarbeiter_id"
+  end
 
   create_table "chat_messages", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -34,17 +49,63 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_213508) do
     t.index ["user_id"], name: "index_chat_messages_on_user_id"
   end
 
-# Could not dump table "klausuren" because of following StandardError
-#   Unknown type 'vector(1536)' for column 'embedding'
+  create_table "klausuren", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "titel"
+    t.string "modul"
+    t.string "semester"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "embedding"
+    t.index ["embedding"], name: "index_klausuren_on_embedding", using: :ivfflat
+  end
 
+  create_table "klausurergebnisse", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "punkte"
+    t.float "note"
+    t.string "status"
+    t.date "pruefungsdatum"
+    t.integer "versuche", default: 0
+    t.bigint "student_id"
+    t.uuid "klausur_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "embedding"
+    t.index ["embedding"], name: "index_klausurergebnisse_on_embedding", using: :ivfflat
+    t.index ["klausur_id"], name: "index_klausurergebnisse_on_klausur_id"
+    t.index ["student_id"], name: "index_klausurergebnisse_on_student_id"
+  end
 
-# Could not dump table "klausurergebnisse" because of following StandardError
-#   Unknown type 'vector(1536)' for column 'embedding'
+  create_table "knowledge_entries", force: :cascade do |t|
+    t.string "category", null: false
+    t.string "title", null: false
+    t.text "content", null: false
+    t.string "keywords"
+    t.string "embedding"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category"], name: "index_knowledge_entries_on_category"
+    t.index ["title"], name: "index_knowledge_entries_on_title"
+  end
 
-
-# Could not dump table "konkrete_abschlussarbeiten" because of following StandardError
-#   Unknown type 'vector(1536)' for column 'embedding'
-
+  create_table "konkrete_abschlussarbeiten", force: :cascade do |t|
+    t.string "betreuer"
+    t.string "forschungsprojekt"
+    t.string "semester"
+    t.string "matrikelnummer"
+    t.string "angepasste_themenskizze"
+    t.string "gesetzte_schwerpunkte"
+    t.date "anmeldung_pruefungsamt"
+    t.date "abgabedatum"
+    t.integer "studienniveau"
+    t.bigint "student_id"
+    t.bigint "abstrakte_abschlussarbeit_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "embedding"
+    t.integer "projekt_id"
+    t.index ["abstrakte_abschlussarbeit_id"], name: "idx_on_abstrakte_abschlussarbeit_id_beb54b04c9"
+    t.index ["student_id"], name: "index_konkrete_abschlussarbeiten_on_student_id"
+  end
 
   create_table "mitarbeiter", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "vorname"
@@ -56,9 +117,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_213508) do
     t.index ["email"], name: "index_mitarbeiter_on_email", unique: true
   end
 
-# Could not dump table "seminare" because of following StandardError
-#   Unknown type 'vector(1536)' for column 'embedding'
-
+  create_table "seminare", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "titel"
+    t.integer "aufnahmekapazitaet"
+    t.string "semester"
+    t.date "praesenzdatum"
+    t.string "ort"
+    t.uuid "mitarbeiter_id"
+    t.uuid "abstraktes_seminar_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "embedding"
+    t.index ["abstraktes_seminar_id"], name: "index_seminare_on_abstraktes_seminar_id"
+    t.index ["embedding"], name: "index_seminare_on_embedding", using: :ivfflat
+    t.index ["mitarbeiter_id"], name: "index_seminare_on_mitarbeiter_id"
+  end
 
   create_table "seminarergebnisse", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.float "muendlich_note"

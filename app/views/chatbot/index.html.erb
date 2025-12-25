@@ -50,9 +50,9 @@
       </div>
 
       <% @chat_messages.each do |message| %>
-        <div class="<%= message.is_from_user? ? 'user-message' : 'assistant-message' %>">
+        <div class="<%= message.from_user? ? 'user-message' : 'assistant-message' %>">
           <div class="message-avatar">
-            <i class="bi bi-<%= message.is_from_user? ? 'person-circle' : 'robot' %>"></i>
+            <i class="bi bi-<%= message.from_user? ? 'person-circle' : 'robot' %>"></i>
           </div>
           <div class="message-content">
             <div class="message-bubble <%= message.role %>"><%= simple_format(message.content) %></div>
