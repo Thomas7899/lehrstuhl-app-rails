@@ -1,95 +1,71 @@
-# 🎓 Lehrstuhl Management App
+# Lehrstuhl-App
 
-Eine moderne Ruby on Rails Anwendung zur Verwaltung von Studierenden, Abschlussarbeiten und universitären Prozessen mit integriertem KI-Assistenten.
+Ein vollständiges Universitäts-Lehrstuhl-Verwaltungssystem mit Rails Backend und Vue.js Frontend.
 
-Benutzername: admin@example.de
-Passwort: password
+## 📁 Projektstruktur
 
----
+```
+├── backend/          # Rails 8 API Backend
+│   ├── app/          # Controllers, Models, Services
+│   ├── db/           # Migrations, Seeds
+│   └── config/       # Rails Konfiguration
+│
+├── frontend/         # Vue 3 Frontend
+│   ├── src/          # Vue Components, Views, Stores
+│   └── public/       # Statische Assets
+│
+└── README.md
+```
 
 ## 🚀 Features
 
-### ✅ **Aktuell implementiert:**
-- **👥 Studierende-Verwaltung** - Vollständige CRUD-Operationen mit modernem UI
-- **📋 Abschlussarbeiten-Management** - Konkrete & Abstrakte Arbeiten
-- **🤖 KI-Assistent** - OpenAI-Integration für Benutzerunterstützung  
-- **🔍 Erweiterte Suche & Filter** - Echtzeit-Filterung mit JavaScript
-- **📊 Dashboard & Statistiken** - Übersichtliche Datenvisualisierung
-- **📱 Responsive Design** - Bootstrap 5 + moderne CSS
-- **🔐 Benutzer-Authentifizierung** - Session-basierte Anmeldung
+### Backend (Rails 8)
+- **RESTful API** für alle Entitäten
+- **OpenAI-Chatbot** mit RAG (Retrieval Augmented Generation)
+- **pgvector** für semantische Suche
+- **JWT-basierte Authentifizierung**
 
-### 🛠 **In Entwicklung:**
-- Vue.js Frontend-Integration
-- Testing Suite (RSpec + Vitest)  
-- Export/Import Funktionen
-- Multi-Language Support (i18n)
+### Frontend (Vue 3)
+- **Vue 3** mit Composition API
+- **Pinia** State Management
+- **Vue Router** für Navigation
+- **Axios** für API-Kommunikation
+- **Responsive Design**
 
----
+## 🛠️ Installation
 
-## 🛠 Tech Stack
+### Backend
+```bash
+cd backend
+bundle install
+rails db:create db:migrate db:seed
+rails server -p 3000
+```
 
-| Kategorie | Technologie | Version |
-|-----------|-------------|---------|
-| **Backend** | Ruby on Rails | 7.2.x |
-| **Frontend** | Bootstrap 5 | 5.3.x |
-| **JavaScript** | ES6+ Modules | - |
-| **Database** | PostgreSQL | 14+ |
-| **Storage** | Active Storage | - |
-| **AI** | OpenAI API | GPT-4o-mini |
-| **Deployment** | Fly.io | - |
-| **Styling** | Sass (SCSS) | - |
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
----
+## 📊 Datenmodelle
 
-## ⚡ Quick Start
+- **Students** - Studentenverwaltung
+- **Mitarbeiter** - Mitarbeiterverwaltung
+- **Seminare** - Seminar- und Kursverwaltung
+- **Abschlussarbeiten** - Bachelor- und Masterarbeiten
+- **Klausuren** - Prüfungsverwaltung
+- **KnowledgeEntry** - Wissensbasis für Chatbot
 
-### **Voraussetzungen**
-- Ruby 3.4.1+
-- PostgreSQL 14+
-- Node.js 18+
-- Git
+## 🤖 Chatbot
 
-## 🔐 Login-Daten (Development)
+Der integrierte KI-Chatbot nutzt:
+- OpenAI GPT-4o-mini für Antwortgenerierung
+- text-embedding-3-small für Embeddings
+- pgvector für Vektorsuche
+- RAG für kontextbasierte Antworten
 
-| Rolle | Email | Passwort |
-|-------|-------|----------|
-| **Admin** | `admin@example.de` | `password` |
-| **Benutzer** | `user@example.de` | `password` |
+## 📝 Lizenz
 
----
-
-## 🎯 Verwendung
-
-### **Dashboard**
-- Übersicht aller wichtigen Kennzahlen
-- Schnellzugriff auf häufige Aktionen
-- Letzte Aktivitäten
-
-### **Studierende verwalten**
-- Hinzufügen, Bearbeiten, Löschen von Studierenden
-- Erweiterte Filter (Name, Email, Geburtsjahr)
-- Grid- und Listen-Ansicht
-- Datenexport (geplant)
-
-### **KI-Assistent**
-- Natürlichsprachige Queries
-- Kontextuelles Verständnis der App
-- Hilfe bei Navigation und Funktionen
-- Powered by OpenAI GPT-4o-mini
-
-### **Abschlussarbeiten**
-- Verwaltung konkreter und abstrakter Arbeiten
-- Status-Tracking
-- Studierenden-Zuordnung
-
----
-
-## 🛠 Entwicklung
-
-### **Code-Style**
-- Folge Rails-Konventionen
-- Verwende RuboCop für Ruby-Code
-- ESLint für JavaScript (geplant)
-- SCSS-Lint für Styles
-
-</div>
+MIT
