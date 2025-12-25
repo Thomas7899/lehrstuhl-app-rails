@@ -1,0 +1,22 @@
+# Render Blueprint for Rails Backend
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: lehrstuhl-api
+    runtime: ruby
+    plan: free
+    buildCommand: |
+      bundle install
+      bundle exec rails db:migrate
+    startCommand: bundle exec puma -C config/puma.rb
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+    autoDeploy: true

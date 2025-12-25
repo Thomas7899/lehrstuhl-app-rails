@@ -82,10 +82,12 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # KORRIGIERT: Fly.io Domain als vertrauenswürdig einstufen
+  # Erlaubte Hosts für Render und andere Plattformen
   config.hosts = [
-    "lehrstuhl-app-rails.fly.dev",  # Deine Fly.io Domain
-    /.*\.fly\.dev/                   # Alle Fly.io Subdomains
+    "lehrstuhl-api.onrender.com",    # Render Domain
+    /.*\.onrender\.com/,              # Alle Render Subdomains
+    "lehrstuhl-app-rails.fly.dev",   # Fly.io Domain (falls noch genutzt)
+    /.*\.fly\.dev/                    # Alle Fly.io Subdomains
   ]
 
   # Skip DNS rebinding protection for the default health check endpoint.
