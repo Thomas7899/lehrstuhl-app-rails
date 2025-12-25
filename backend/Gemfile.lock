@@ -439,7 +439,6 @@ DEPENDENCIES
   pgvector (~> 0.2.0)
   propshaft
   puma (>= 5.0)
-  rack (>= 3.2.3)
   rack-cors
   rails (~> 8.0.1)
   rake

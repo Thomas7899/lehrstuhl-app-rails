@@ -223,7 +223,7 @@ const thesisToDelete = ref<Abschlussarbeit | null>(null)
 const formData = ref({
   titel: '',
   beschreibung: '',
-  status: 'pending' as const,
+  status: 'pending' as 'pending' | 'in_progress' | 'completed',
   matrikelnummer: '',
   abgabedatum: ''
 })

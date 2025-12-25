@@ -202,10 +202,10 @@ const formLoading = ref(false)
 const seminarToDelete = ref<Seminar | null>(null)
 
 // Form Data
-const formData = ref({
+const formData = ref<Partial<Seminar>>({
   titel: '',
   semester: '',
-  aufnahmekapazitaet: null as number | null,
+  aufnahmekapazitaet: undefined,
   praesenzdatum: '',
   ort: ''
 })
@@ -231,7 +231,7 @@ const editSeminar = (seminar: Seminar) => {
   formData.value = {
     titel: seminar.titel,
     semester: seminar.semester || '',
-    aufnahmekapazitaet: seminar.aufnahmekapazitaet || null,
+    aufnahmekapazitaet: seminar.aufnahmekapazitaet,
     praesenzdatum: seminar.praesenzdatum || '',
     ort: seminar.ort || ''
   }
@@ -251,7 +251,7 @@ const closeModals = () => {
 }
 
 const resetForm = () => {
-  formData.value = { titel: '', semester: '', aufnahmekapazitaet: null, praesenzdatum: '', ort: '' }
+  formData.value = { titel: '', semester: '', aufnahmekapazitaet: undefined, praesenzdatum: '', ort: '' }
 }
 
 const submitForm = async () => {
