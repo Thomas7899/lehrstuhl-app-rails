@@ -61,22 +61,55 @@ class RagContextService
   end
 
   def fetch_similar(model, embedding, label)
-    sql = <<~SQL
-      SELECT #{model.table_name}.*,
-             (embedding <-> '#{embedding_to_pgvector(embedding)}') AS distance,
-             '#{label}' AS typ
-      FROM #{model.table_name}
-      WHERE embedding IS NOT NULL
-      ORDER BY distance ASC
-      LIMIT 5
-    SQL
-
-    results = ActiveRecord::Base.connection.select_all(sql).to_a
-    Rails.logger.info "[RAG] #{model.name}: #{results.size} Treffer gefunden"
-    results
+    # Da embedding als string (JSON) gespeichert ist, verwenden wir Ruby-basierte Kosinus-Ähnlichkeit
+    # statt pgvector's native Operatoren
+    records = model.where.not(embedding: [nil, "", "[]"]).limit(50)
+    
+    results = records.map do |record|
+      stored_embedding = parse_embedding(record.embedding)
+      next nil unless stored_embedding&.any?
+      
+      distance = cosine_distance(embedding, stored_embedding)
+      record.attributes.merge("distance" => distance, "typ" => label)
+    end.compact
+    
+    sorted = results.sort_by { |r| r["distance"].to_f }.take(5)
+    Rails.logger.info "[RAG] #{model.name}: #{sorted.size} Treffer gefunden"
+    sorted
   rescue => e
     Rails.logger.error "[RAG] Fehler bei #{model.name}: #{e.message}"
     []
+  end
+  
+  def parse_embedding(embedding_string)
+    return nil if embedding_string.blank?
+    
+    # Handle verschiedene Formate: JSON array oder pgvector string
+    if embedding_string.start_with?("[")
+      JSON.parse(embedding_string)
+    elsif embedding_string.start_with?("{")
+      # pgvector format: {0.1,0.2,...}
+      embedding_string.gsub(/[{}]/, "").split(",").map(&:to_f)
+    else
+      nil
+    end
+  rescue JSON::ParserError => e
+    Rails.logger.warn "[RAG] Embedding parse error: #{e.message}"
+    nil
+  end
+  
+  def cosine_distance(vec1, vec2)
+    return 1.0 if vec1.nil? || vec2.nil? || vec1.empty? || vec2.empty?
+    return 1.0 if vec1.length != vec2.length
+    
+    dot_product = vec1.zip(vec2).map { |a, b| a * b }.sum
+    magnitude1 = Math.sqrt(vec1.map { |x| x * x }.sum)
+    magnitude2 = Math.sqrt(vec2.map { |x| x * x }.sum)
+    
+    return 1.0 if magnitude1.zero? || magnitude2.zero?
+    
+    similarity = dot_product / (magnitude1 * magnitude2)
+    1.0 - similarity  # Convert similarity to distance
   end
 
   def formatted_context(results)
