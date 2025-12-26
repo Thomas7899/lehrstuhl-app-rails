@@ -25,6 +25,7 @@ production:
   primary: &primary_production
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
+    prepared_statements: false
   cache:
     <<: *primary_production
     database: lehrstuhl_app_production_cache
