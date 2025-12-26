@@ -34,7 +34,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_25_214351) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "embedding"
-    t.index ["embedding"], name: "index_abstrakte_seminare_on_embedding", using: :ivfflat
     t.index ["mitarbeiter_id"], name: "index_abstrakte_seminare_on_mitarbeiter_id"
   end
 
@@ -56,7 +55,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_25_214351) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "embedding"
-    t.index ["embedding"], name: "index_klausuren_on_embedding", using: :ivfflat
   end
 
   create_table "klausurergebnisse", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -70,7 +68,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_25_214351) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "embedding"
-    t.index ["embedding"], name: "index_klausurergebnisse_on_embedding", using: :ivfflat
     t.index ["klausur_id"], name: "index_klausurergebnisse_on_klausur_id"
     t.index ["student_id"], name: "index_klausurergebnisse_on_student_id"
   end
@@ -129,7 +126,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_25_214351) do
     t.datetime "updated_at", null: false
     t.string "embedding"
     t.index ["abstraktes_seminar_id"], name: "index_seminare_on_abstraktes_seminar_id"
-    t.index ["embedding"], name: "index_seminare_on_embedding", using: :ivfflat
     t.index ["mitarbeiter_id"], name: "index_seminare_on_mitarbeiter_id"
   end
 
